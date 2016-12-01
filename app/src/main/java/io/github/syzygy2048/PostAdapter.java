@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.syzygy2048.model.Post;
-import io.github.syzygy2048.the.dogpark.R;
 
 /**
  * Created by Syzygy on 12.07.16.
@@ -55,17 +54,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_listitem, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
 
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.userId.setText(""+data.get(position).getUserId());
-        holder.postId.setText(""+data.get(position).getId());
-        holder.title.setText(data.get(position).getTitle());
-        holder.body.setText(data.get(position).getBody());
+        Post post = data.get(position);
+        holder.userId.setText(String.valueOf(post.getUserId()));
+        holder.postId.setText(String.valueOf(post.getId()));
+        holder.title.setText(post.getTitle());
+        holder.body.setText(post.getBody());
     }
 
     @Override
