@@ -1,6 +1,5 @@
 package io.github.syzygy2048;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,10 +23,12 @@ import io.github.syzygy2048.events.ClickedEvent;
 import io.github.syzygy2048.model.Post;
 import io.github.syzygy2048.net.PostService;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     @Inject
     @Named("daggerTest")
@@ -50,28 +50,20 @@ public class MainActivity extends AppCompatActivity {
     Bus bus;
     @OnClick(R.id.requestButton)
     public void onClickRequest(){
-        new AsyncTask<Void, Void, Response<List<Post>>>(){
+        Call<List<Post>> request = postService.getPosts();
+        request.enqueue(new Callback<List<Post>>() {
             @Override
-            protected Response<List<Post>> doInBackground(Void... voids) {
-
-
-                try {
-                    Call<List<Post>> request = postService.getPosts();
-                    Response<List<Post>> response = null;
-                    response = request.execute();
-                    return response;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Response<List<Post>> listResponse) {
-                postAdapter.updatePostData(listResponse.body());
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                postAdapter.updatePostData(response.body());
                 bus.post(new ClickedEvent("event published"));
             }
-        }.execute();
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                bus.post(new ClickedEvent("FAILURE"));
+                Log.w(TAG, t);
+            }
+        });
 
     }
 
@@ -85,21 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
         bus.register(this);
 
-        recyclerView.hasFixedSize();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerView.setAdapter(postAdapter);
      }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     /**
      * Could make sense as an interface or class that is extended, but not necessary right now
