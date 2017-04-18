@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
 
     <TextView
+        android:id="@+id/userIdLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User ID: "
-        android:id="@+id/userIdLabel"/>
+        android:text="User ID: "/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/userId"
-        android:layout_toRightOf="@id/userIdLabel"/>
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post Id: "
-        android:layout_marginLeft="20dp"
+        android:layout_toEndOf="@+id/userIdLabel"/>
+
+    <TextView
         android:id="@+id/postIdLabel"
-        android:layout_toRightOf="@id/userIdLabel"/>
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/userIdLabel"
+        android:text="Post Id: "/>
+
+    <TextView
         android:id="@+id/postId"
-        android:layout_toRightOf="@id/postIdLabel"/>
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:layout_toEndOf="@+id/postIdLabel"/>
+
+    <TextView
         android:id="@+id/postHeader"
-        android:layout_below="@id/userIdLabel"/>
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:layout_below="@id/userIdLabel"
+        android:maxLines="1"/>
+
+    <TextView
         android:id="@+id/postBody"
-        android:layout_below="@id/postHeader"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/postHeader"
+        android:maxLines="1"/>
 
 </RelativeLayout>
